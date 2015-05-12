@@ -1,0 +1,37 @@
+.\" @(#)people.1 1.6 13 Nov 1998 Lysator
+.\" Copyright (c) 1993-1998 Peter Eriksson, Lysator ACS, Linköping University.
+.\" This program is released under the GNU Public License version 2.
+.\"
+.TH PEOPLE 1 "13 Nov 1998"
+.SH NAME
+people \- A frontend to the Rwho program
+.SH SYNOPSIS
+.B people
+.RB [ \-hvaH ]
+.RB [ \--help ]
+.RB [ \--version ]
+.RB [ \--all ]
+.RB [ \--with-header ]
+.RB [ rwho options ]
+.SH DESCRIPTION
+.IX "people program" "" \fLpeople\fP program"
+.B people
+is a program which acts as a frontend to the
+.B rwho
+program, reformatting the output in a more people-oriented way.
+.SH ARGUMENTS
+.TP
+.B \-h, \--help
+Gives a brief description of the available command line options.
+.TP
+.B \-v, \--version
+Prints out the version number.
+.TP
+.B \-a, \--all
+Print out information about all users, and not only about the
+currently active ones.
+.TP
+.B \-H, \--with-header
+Add a small header to the output being printed.
+.SH "SEE ALSO"
+.BR rwho (1)

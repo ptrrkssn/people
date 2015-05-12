@@ -1,0 +1,21 @@
+This is a small C program, acting as a frontend to the
+rwho command. It reformats the output in a people-oriented way.
+
+"people" is free software, available under the GNU Public License v2.
+
+The "getopt" files are from the Gnu project.
+
+The program may be used as a simple "fingerd" replacement and
+will try to have as one if called under the name "fingerd".
+For example if you have this in your /etc/inetd.conf file:
+
+	finger stream tcp nowait nobody /usr/local/bin/people fingerd
+
+To compile it, simple do "./configure ; make" and then do
+"make install" to install it and the manual page in /usr/local/bin
+and /usr/local/man/man1. See the file INSTALL for more specific
+instructions regarding options to the "configure" script.
+
+
+		- Peter Eriksson <pen@lysator.liu.se>, 13 Nov 1998
+

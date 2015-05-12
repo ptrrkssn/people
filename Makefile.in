@@ -1,0 +1,109 @@
+# Makefile for People 1.4
+#
+# Copyright (C) 1993-1997 Peter Eriksson <pen@lysator.liu.se>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+#### Start of system configuration section. ####
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+srcdir = @srcdir@
+bindir = @bindir@
+mandir = @mandir@
+man1dir = $(mandir)/man1
+
+VPATH = @srcdir@
+
+CC = @CC@
+TAR = @TAR@
+GZIP = @GZIP@
+
+INSTALL = @INSTALL@
+
+DEFS = @DEFS@ -DPATH_RWHO='"'@RWHO@'"'
+LIBS = @LIBS@
+
+CFLAGS = -g
+LDFLAGS = -g
+
+
+
+# Prefix to be prepended to each installed program, normally empty or `g'.
+binprefix = 
+
+#### End of system configuration section. ####
+
+SRCS = people.c version.c getopt.c getopt1.c
+OBJS = people.o version.o getopt.o getopt1.o
+HDRS = getopt.h
+
+
+all: people
+
+.c.o:
+	$(CC) -c $(CPPFLAGS) $(DEFS) $(CFLAGS) $<
+
+
+install: people installdirs
+	$(INSTALL) -m 755 people $(bindir)/$(binprefix)people
+	$(INSTALL) -m 644 $(srcdir)/people.man $(man1dir)/$(binprefix)people.1
+
+installdirs:
+	$(srcdir)/aux/mkinstalldirs $(bindir) $(mandir) $(man1dir)
+
+version.c:
+	(cd $(srcdir) ; PACKNAME=`basename \`pwd\`` ; echo 'char version[] = "People, version '`echo $$PACKNAME | cut -d- -f2`'";') >version.c
+
+people: $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+people.o getopt.o getopt1.o: getopt.h
+
+
+TAGS: $(SRCS)
+	etags $(SRCS)
+
+
+clean:
+	rm -f people *.o *~ core \#*
+
+mostlyclean: clean
+
+distclean: clean
+	rm -f Makefile config.status config.log config.cache version.c
+
+realclean: distclean
+	rm -f TAGS
+
+
+dist: 	distclean
+	(PACKNAME=`basename \`pwd\`` ; cd .. ; $(TAR) cf - $$PACKNAME | $(GZIP) -9 >$$PACKNAME.tar.gz)
+
+
+
+$(srcdir)/configure: configure.in
+	cd ${srcdir} && autoconf
+
+Makefile: Makefile.in config.status
+	./config.status
+
+config.status: configure
+	./config.status --recheck
+
+
+# Prevent GNU make v3 from overflowing arg limit on SysV.
+.NOEXPORT:
